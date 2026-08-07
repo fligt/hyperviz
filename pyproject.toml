@@ -1,0 +1,28 @@
+[project]
+name = "hyperviz"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Frank Ligterink", email = "frank.ligterink@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "panel>=1.9.3",
+    "param>=2.4.1",
+]
+
+[project.scripts]
+hyperviz = "hyperviz:main"
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "jupyter-bokeh>=4.1.0",
+    "nb-clean>=4.0.1",
+    "pip>=26.2.1",
+]
