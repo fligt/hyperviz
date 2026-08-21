@@ -8,8 +8,9 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "panel>=1.9.3",
-    "param>=2.4.1",
+    "dash>=4.4.1",
+    "numpy>=2.5.1",
+    "plotly>=6.9.0",
 ]
 
 [project.scripts]
@@ -21,8 +22,12 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "fairdatanow>=0.2.23",
     "ipykernel>=7.3.0",
     "jupyter-bokeh>=4.1.0",
-    "nb-clean>=4.0.1",
+    "jupytext>=1.19.5",
     "pip>=26.2.1",
 ]
+
+[tool.jupytext]
+formats = "ipynb,py:percent"

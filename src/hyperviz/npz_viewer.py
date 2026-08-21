@@ -1,0 +1,36 @@
+from dash import Dash, dcc, html, callback, Input, Output, State
+import plotly.express as px
+import numpy as np
+
+def create_app(data: dict) -> Dash:
+
+    app = Dash(__name__)
+    app.layout = html.Div([
+        dcc.Store(id='data_store', data=data),
+        dcc.Dropdown(id="object_num_dropdown", options=list(data['npz'].keys()), placeholder='Select Object Number'),
+        dcc.Graph(id="pseudo_rgb_graph", config={"modeBarButtonsToAdd": ["drawrect", "eraseshape"], "scrollZoom":True})
+    ])
+
+    @app.callback(
+        Output(component_id="pseudo_rgb_graph", component_property="figure"),
+        Input(component_id="object_num_dropdown", component_property="value"),
+        State(component_id="data_store", component_property="data"),
+        prevent_initial_call=True
+        )
+    def on_dropdown_change(object_num_dropdown_value: str, data_store_data: dict) -> px.imshow:
+        npz_file = data_store_data['npz'][object_num_dropdown_value][0]
+        npz = np.load(npz_file)
+        cube = npz['image'][:,:, ::-1].transpose(1, 2, 0)
+        pseudo_rgb = cube[:,:, [70, 53, 19]] 
+
+        pseudo_rgb_graph_figure = px.imshow(pseudo_rgb, binary_string=True)
+
+        pseudo_rgb_graph_figure.update_layout(dragmode='drawrect')
+        
+        return pseudo_rgb_graph_figure
+
+    return app
+
+def make_dashboard(data: dict):
+    app = create_app(data)
+    app.run(debug=True)
