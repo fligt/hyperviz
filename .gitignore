@@ -9,5 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Quarto files
 /.quarto/
 **/*.quarto_ipynb
+
+# Notebooks
+*.ipynb

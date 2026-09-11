@@ -16,6 +16,7 @@ jupyter:
 
 ```{python}
 from hyperviz import make_dashboard
+from fairdatanow import data_now
 
 url = 'https://laboppad.nl/ukiyo-e-world' 
 
