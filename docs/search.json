@@ -1,0 +1,13 @@
+[
+  {
+    "objectID": "notebooks/01_npz_viewer.html",
+    "href": "notebooks/01_npz_viewer.html",
+    "title": "NPZ Viewer",
+    "section": "",
+    "text": "from fairdatanow import data_now\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = '''\n# here are the 10 corresponding spectral data cubes processed by Gauthier and Tessa \n[data.npz] \nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n'''\n\ndata = data_now(url, toml_txt)\n\n\n\n\nFound 10 files in table: ['npz']\n\n\n\nfrom dash import Dash, dcc, html, callback, Input, Output, State\nimport plotly.express as px\nimport numpy as np\n\n\ndef create_app(data: dict) -&gt; Dash:\n\n    app = Dash(__name__)\n    app.layout = html.Div([\n        dcc.Store(id='data_store', data=data),\n        dcc.Dropdown(id=\"object_num_dropdown\", options=list(data['npz'].keys()), placeholder='Select Object Number'),\n        dcc.Graph(id=\"pseudo_rgb_graph\", config={\"modeBarButtonsToAdd\": [\"drawrect\", \"eraseshape\"], \"scrollZoom\":True})\n    ])\n\n    @app.callback(\n        Output(component_id=\"pseudo_rgb_graph\", component_property=\"figure\"),\n        Input(component_id=\"object_num_dropdown\", component_property=\"value\"),\n        State(component_id=\"data_store\", component_property=\"data\"),\n        prevent_initial_call=True\n        )\n    def on_dropdown_change(object_num_dropdown_value: str, data_store_data: dict) -&gt; px.imshow:\n        npz_file = data_store_data['npz'][object_num_dropdown_value][0]\n        npz = np.load(npz_file)\n        cube = npz['image'][:,:, ::-1].transpose(1, 2, 0)\n        pseudo_rgb = cube[:,:, [70, 53, 19]] \n\n        pseudo_rgb_graph_figure = px.imshow(pseudo_rgb, binary_string=True)\n\n        pseudo_rgb_graph_figure.update_layout(dragmode='drawrect')\n        \n        return pseudo_rgb_graph_figure\n\n    return app\n\ndef make_dashboard(data: dict):\n    app = create_app(data)\n    app.run(debug=True)\n\n\nmake_dashboard(data)",
+    "crumbs": [
+      "Notebooks",
+      "NPZ Viewer"
+    ]
+  }
+]

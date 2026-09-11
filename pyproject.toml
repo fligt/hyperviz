@@ -26,8 +26,9 @@ dev = [
     "ipykernel>=7.3.0",
     "jupyter-bokeh>=4.1.0",
     "jupytext>=1.19.5",
+    "nbclient>=0.11.0",
     "pip>=26.2.1",
 ]
 
 [tool.jupytext]
-formats = "ipynb,py:percent"
+formats = "ipynb,qmd"

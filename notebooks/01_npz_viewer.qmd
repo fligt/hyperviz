@@ -1,21 +1,24 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: percent
-#       format_version: '1.3'
-#       jupytext_version: 1.19.5
-#   kernelspec:
-#     display_name: .venv
-#     language: python
-#     name: python3
-# ---
+---
+title: NPZ Viewer
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.19.5
+  kernelspec:
+    display_name: .venv
+    language: python
+    name: python3
+---
 
-# %%
+
+```{python}
 from fairdatanow import data_now
+```
 
-# %%
+```{python}
 url = 'https://laboppad.nl/ukiyo-e-world' 
 
 toml_txt = '''
@@ -34,14 +37,15 @@ RV-360-6886 = ".*RIS/interim/.*RV-360-6886.*[.]npz"
 '''
 
 data = data_now(url, toml_txt)
+```
 
-# %%
+```{python}
 from dash import Dash, dcc, html, callback, Input, Output, State
 import plotly.express as px
 import numpy as np
+```
 
-
-# %%
+```{python}
 def create_app(data: dict) -> Dash:
 
     app = Dash(__name__)
@@ -74,7 +78,8 @@ def create_app(data: dict) -> Dash:
 def make_dashboard(data: dict):
     app = create_app(data)
     app.run(debug=True)
+```
 
-
-# %%
+```{python}
 make_dashboard(data)
+```
