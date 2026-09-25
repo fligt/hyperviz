@@ -1,10 +1,20 @@
 [
   {
+    "objectID": "notebooks/02_npz_dashboard.html",
+    "href": "notebooks/02_npz_dashboard.html",
+    "title": "NPZ & TIF Dashboard",
+    "section": "",
+    "text": "from fairdatanow import data_now\nfrom hyperviz import make_dashboard\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = \"\"\"\n[data.npz]\nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n\n[data.tif]\nRV-1-4468-544 = \".*akama.*RV-1-4468-544[.]tif\"\nRV-1-4469-484 = \".*akama.*RV-1-4469-484[.]tif\"\nRV-1-4469-58 = \".*akama.*RV-1-4469-58[.]tif\"\nRV-1-4469-x6 = \".*akama.*RV-1-4469-x6[.]tif\"\nRV-1-4469Q = \".*akama.*RV-1-4469Q[.]tif\"\nRV-1-4470-12 = \".*akama.*RV-1-4470-12[.]tif\"\nRV-1-4470-27 = \".*akama.*1-4470-27[.]tif\"\nRV-360-2345g = \".*akama.*RV-360-2345-?g[.]tif\"\nRV-360-2359-2 = \".*akama.*RV-360-2359-2[.]tif\"\nRV-360-6886 = \".*akama.*RV-360-6886[.]tif\"\n\"\"\"\n\ndata = data_now(url, toml_txt)\nmake_dashboard(data, toml_txt)\n\n\n\n\nExample of a dashboard page",
+    "crumbs": [
+      "NPZ & TIF Dashboard"
+    ]
+  },
+  {
     "objectID": "notebooks/01_npz_viewer.html",
     "href": "notebooks/01_npz_viewer.html",
     "title": "NPZ Viewer",
     "section": "",
-    "text": "from hyperviz import make_dashboard\nfrom fairdatanow import data_now\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = '''\n# here are the 10 corresponding spectral data cubes processed by Gauthier and Tessa \n[data.npz] \nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n'''\n\ndata = data_now(url, toml_txt)\n\n# %%\nmake_dashboard(data)\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\nFound 10 files in table: ['npz']",
+    "text": "from hyperviz import make_viewer\nfrom fairdatanow import data_now\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = '''\n# here are the 10 corresponding spectral data cubes processed by Gauthier and Tessa \n[data.npz] \nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n'''\n\ndata = data_now(url, toml_txt)\n\n# %%\nmake_viewer(data)",
     "crumbs": [
       "NPZ Viewer"
     ]

@@ -3,7 +3,7 @@ import plotly.express as px
 from dash import Dash, Input, Output, State, dcc, html
 
 
-def create_app(data: dict) -> Dash:
+def create__simple_app(data: dict) -> Dash:
 
     app = Dash(__name__)
     app.layout = html.Div(
@@ -47,6 +47,6 @@ def create_app(data: dict) -> Dash:
     return app
 
 
-def make_dashboard(data: dict):
-    app = create_app(data)
+def make_viewer(data: dict):
+    app = create__simple_app(data)
     app.run(debug=True)

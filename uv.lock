@@ -449,6 +449,18 @@ wheels = [
 ]
 
 [[package]]
+name = "dash-daq"
+version = "0.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dash" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/21/3d/36bc0bece8d8a9bafc26997d915b3f4c5d44f9289cc6ce07987837c015ca/dash_daq-0.6.0.tar.gz", hash = "sha256:ae2568aca470b186d6805ff2317a932a6c1a5ed879fe33e525e43810fc354dce", size = 650917, upload-time = "2025-03-11T13:38:16.661Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/0f/8dd4776d5ca5b7f76d998a326d5caec722d896a3e1982cbef44fbb74e4f5/dash_daq-0.6.0-py3-none-any.whl", hash = "sha256:d155b5586f164d5d4379d5999275759c525b764a1eb5313a34abce13c50aa856", size = 675957, upload-time = "2025-03-11T13:38:13.942Z" },
+]
+
+[[package]]
 name = "debugpy"
 version = "1.8.21"
 source = { registry = "https://pypi.org/simple" }
@@ -593,6 +605,7 @@ version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "dash" },
+    { name = "dash-daq" },
     { name = "numpy" },
     { name = "plotly" },
 ]
@@ -611,6 +624,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dash", specifier = ">=4.4.1" },
+    { name = "dash-daq", specifier = ">=0.6.0" },
     { name = "numpy", specifier = ">=2.5.1" },
     { name = "plotly", specifier = ">=6.9.0" },
 ]
