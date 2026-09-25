@@ -53,3 +53,25 @@ make_dashboard(data, toml_txt)
 ```
 
 ![Example of a dashboard page](../images/npz_tif_dashboard.png)
+
+## API
+
+The following API reference is generated from the public functions and their
+docstrings in `hyperviz.npz_dashboard`.
+
+```{python}
+#| echo: false
+#| output: asis
+
+import inspect
+import hyperviz.npz_dashboard as module
+
+for name, function in inspect.getmembers(module, inspect.isfunction):
+    if function.__module__ == module.__name__ and not name.startswith("_"):
+        signature = inspect.signature(function)
+        docstring = inspect.getdoc(function) or "No documentation available."
+        print(f"### `{name}{signature}`\n")
+        print("```text")
+        print(docstring)
+        print("```\n")
+```

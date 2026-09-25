@@ -4,9 +4,61 @@
     "href": "notebooks/02_npz_dashboard.html",
     "title": "NPZ & TIF Dashboard",
     "section": "",
-    "text": "from fairdatanow import data_now\nfrom hyperviz import make_dashboard\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = \"\"\"\n[data.npz]\nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n\n[data.tif]\nRV-1-4468-544 = \".*akama.*RV-1-4468-544[.]tif\"\nRV-1-4469-484 = \".*akama.*RV-1-4469-484[.]tif\"\nRV-1-4469-58 = \".*akama.*RV-1-4469-58[.]tif\"\nRV-1-4469-x6 = \".*akama.*RV-1-4469-x6[.]tif\"\nRV-1-4469Q = \".*akama.*RV-1-4469Q[.]tif\"\nRV-1-4470-12 = \".*akama.*RV-1-4470-12[.]tif\"\nRV-1-4470-27 = \".*akama.*1-4470-27[.]tif\"\nRV-360-2345g = \".*akama.*RV-360-2345-?g[.]tif\"\nRV-360-2359-2 = \".*akama.*RV-360-2359-2[.]tif\"\nRV-360-6886 = \".*akama.*RV-360-6886[.]tif\"\n\"\"\"\n\ndata = data_now(url, toml_txt)\nmake_dashboard(data, toml_txt)\n\n\n\n\nExample of a dashboard page",
+    "text": "from fairdatanow import data_now\nfrom hyperviz import make_dashboard\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = \"\"\"\n[data.npz]\nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n\n[data.tif]\nRV-1-4468-544 = \".*akama.*RV-1-4468-544[.]tif\"\nRV-1-4469-484 = \".*akama.*RV-1-4469-484[.]tif\"\nRV-1-4469-58 = \".*akama.*RV-1-4469-58[.]tif\"\nRV-1-4469-x6 = \".*akama.*RV-1-4469-x6[.]tif\"\nRV-1-4469Q = \".*akama.*RV-1-4469Q[.]tif\"\nRV-1-4470-12 = \".*akama.*RV-1-4470-12[.]tif\"\nRV-1-4470-27 = \".*akama.*1-4470-27[.]tif\"\nRV-360-2345g = \".*akama.*RV-360-2345-?g[.]tif\"\nRV-360-2359-2 = \".*akama.*RV-360-2359-2[.]tif\"\nRV-360-6886 = \".*akama.*RV-360-6886[.]tif\"\n\"\"\"\n\ndata = data_now(url, toml_txt)\nmake_dashboard(data, toml_txt)",
     "crumbs": [
+      "Guides",
       "NPZ & TIF Dashboard"
+    ]
+  },
+  {
+    "objectID": "notebooks/02_npz_dashboard.html#api",
+    "href": "notebooks/02_npz_dashboard.html#api",
+    "title": "NPZ & TIF Dashboard",
+    "section": "API",
+    "text": "API\nThe following API reference is generated from the public functions and their docstrings in hyperviz.npz_dashboard.\n\ncreate_dashboard(data_dict: dict, toml_text: str, *, default_object: str | None = None, title: str = 'Spectral Image Dashboard') -&gt; dash.dash.Dash\nCreate a spectral-image dashboard without starting its server.\n\nParameters\n----------\ndata_dict\n    Mapping with matching ``npz`` and ``tif`` entries for each object.\n    NPZ files must contain ``image`` and ``wavelengths`` arrays.\ntoml_text\n    TOML configuration retained by the dashboard when ROI annotations are\n    downloaded.\ndefault_object\n    Object selected when the dashboard opens. The first NPZ object is used\n    when this is omitted.\ntitle\n    Heading displayed above the dashboard.\n\nReturns\n-------\nDash\n    The configured Dash application. Call ``run`` on it to start a server.\n\nRaises\n------\nValueError\n    If no NPZ objects are supplied or ``default_object`` is unknown.\n\n\nmake_dashboard(data_dict: dict, toml_text: str, *, default_object: str | None = None, title: str = 'Spectral Image Dashboard') -&gt; None\nCreate and launch an interactive spectral-image dashboard.\n\nParameters\n----------\ndata_dict\n    Mapping with matching ``npz`` and ``tif`` entries for each object.\n    NPZ files must contain ``image`` and ``wavelengths`` arrays.\ntoml_text\n    TOML configuration retained by the dashboard when ROI annotations are\n    downloaded.\ndefault_object\n    Object selected when the dashboard opens. The first NPZ object is used\n    when this is omitted.\ntitle\n    Heading displayed above the dashboard.\n\nNotes\n-----\nThis function starts Dash in external Jupyter mode and blocks until the\nserver is stopped. Use ``create_dashboard`` when the application needs\nto be configured or embedded before it is run.",
+    "crumbs": [
+      "Guides",
+      "NPZ & TIF Dashboard"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Hyperviz",
+    "section": "",
+    "text": "Hyperviz is …\n\n\nFrom a checkout of this repository, create the development environment and install Hyperviz with:\nuv sync\n\n\n\n\nNPZ Viewer provides a compact viewer for quickly inspecting hyperspectral cubes.\nNPZ & TIF Dashboard displays NPZ and TIFF data together and supports drawing, importing, and exporting regions of interest.\n\n\n\n\nThe Hyperviz NPZ and TIFF dashboard\n\n\n\n\n\nLoad a data mapping and pass it to one of the public entry points:\nfrom fairdatanow import data_now\nfrom hyperviz import make_dashboard\n\ndata = data_now(url, toml_text)\nmake_dashboard(data, toml_text)\nThe guide pages contain complete data-selection examples and automatically generated API sections based on the current Python signatures and docstrings.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "Hyperviz",
+    "section": "",
+    "text": "From a checkout of this repository, create the development environment and install Hyperviz with:\nuv sync",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#choose-a-viewer",
+    "href": "index.html#choose-a-viewer",
+    "title": "Hyperviz",
+    "section": "",
+    "text": "NPZ Viewer provides a compact viewer for quickly inspecting hyperspectral cubes.\nNPZ & TIF Dashboard displays NPZ and TIFF data together and supports drawing, importing, and exporting regions of interest.\n\n\n\n\nThe Hyperviz NPZ and TIFF dashboard",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#basic-usage",
+    "href": "index.html#basic-usage",
+    "title": "Hyperviz",
+    "section": "",
+    "text": "Load a data mapping and pass it to one of the public entry points:\nfrom fairdatanow import data_now\nfrom hyperviz import make_dashboard\n\ndata = data_now(url, toml_text)\nmake_dashboard(data, toml_text)\nThe guide pages contain complete data-selection examples and automatically generated API sections based on the current Python signatures and docstrings.",
+    "crumbs": [
+      "Home"
     ]
   },
   {
@@ -16,6 +68,18 @@
     "section": "",
     "text": "from hyperviz import make_viewer\nfrom fairdatanow import data_now\n\nurl = 'https://laboppad.nl/ukiyo-e-world' \n\ntoml_txt = '''\n# here are the 10 corresponding spectral data cubes processed by Gauthier and Tessa \n[data.npz] \nRV-1-4468-544 = \".*RIS/interim/.*RV-1-4468-544.*[.]npz\"\nRV-1-4469-484 = \".*RIS/interim/.*RV-1-4469-484.*[.]npz\"\nRV-1-4469-58 = \".*RIS/interim/.*RV-1-4469-58.*[.]npz\"\nRV-1-4469-x6 = \".*RIS/interim/.*RV-1-4469-x6.*[.]npz\"\nRV-1-4469Q = \".*RIS/interim/.*RV-1-4469Q.*[.]npz\"\nRV-1-4470-12 = \".*RIS/interim/.*RV-1-4470-12.*[.]npz\"\nRV-1-4470-27 = \".*RIS/interim/.*RV-1-4470-27.*[.]npz\"\nRV-360-2345g = \".*RIS/interim/.*RV-360-2345g.*[.]npz\"\nRV-360-2359-2 = \".*RIS/interim/.*RV-360-2359-2.*[.]npz\"\nRV-360-6886 = \".*RIS/interim/.*RV-360-6886.*[.]npz\"\n'''\n\ndata = data_now(url, toml_txt)\n\n# %%\nmake_viewer(data)",
     "crumbs": [
+      "Guides",
+      "NPZ Viewer"
+    ]
+  },
+  {
+    "objectID": "notebooks/01_npz_viewer.html#api",
+    "href": "notebooks/01_npz_viewer.html#api",
+    "title": "NPZ Viewer",
+    "section": "API",
+    "text": "API\nThe following API reference is generated from the public functions and their docstrings in hyperviz.npz_viewer.\n\ncreate__simple_app(data: dict) -&gt; dash.dash.Dash\nNo documentation available.\n\n\nmake_viewer(data: dict) -&gt; None\nLaunch an interactive viewer for hyperspectral NPZ data.\n\nParameters\n----------\ndata\n    Mapping with an ``npz`` entry. Each key below ``npz`` identifies an\n    object and maps to a sequence whose first item is the path to its NPZ\n    file. Each NPZ file must contain an ``image`` array.\n\nNotes\n-----\nThis function starts a Dash development server and blocks until that\nserver is stopped.",
+    "crumbs": [
+      "Guides",
       "NPZ Viewer"
     ]
   }

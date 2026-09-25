@@ -139,7 +139,32 @@ def create_dashboard(
     default_object: str | None = None,
     title: str = "Spectral Image Dashboard",
 ) -> Dash:
-    """Create an isolated spectral-image dashboard for the supplied data."""
+    """Create a spectral-image dashboard without starting its server.
+
+    Parameters
+    ----------
+    data_dict
+        Mapping with matching ``npz`` and ``tif`` entries for each object.
+        NPZ files must contain ``image`` and ``wavelengths`` arrays.
+    toml_text
+        TOML configuration retained by the dashboard when ROI annotations are
+        downloaded.
+    default_object
+        Object selected when the dashboard opens. The first NPZ object is used
+        when this is omitted.
+    title
+        Heading displayed above the dashboard.
+
+    Returns
+    -------
+    Dash
+        The configured Dash application. Call ``run`` on it to start a server.
+
+    Raises
+    ------
+    ValueError
+        If no NPZ objects are supplied or ``default_object`` is unknown.
+    """
     object_numbers = list(data_dict["npz"])
     if not object_numbers:
         raise ValueError("data_dict must contain at least one NPZ object")
@@ -482,7 +507,28 @@ def make_dashboard(
     default_object: str | None = None,
     title: str = "Spectral Image Dashboard",
 ) -> None:
-    """Create and run a spectral-image dashboard."""
+    """Create and launch an interactive spectral-image dashboard.
+
+    Parameters
+    ----------
+    data_dict
+        Mapping with matching ``npz`` and ``tif`` entries for each object.
+        NPZ files must contain ``image`` and ``wavelengths`` arrays.
+    toml_text
+        TOML configuration retained by the dashboard when ROI annotations are
+        downloaded.
+    default_object
+        Object selected when the dashboard opens. The first NPZ object is used
+        when this is omitted.
+    title
+        Heading displayed above the dashboard.
+
+    Notes
+    -----
+    This function starts Dash in external Jupyter mode and blocks until the
+    server is stopped. Use ``create_dashboard`` when the application needs
+    to be configured or embedded before it is run.
+    """
     app = create_dashboard(
         data_dict,
         toml_text,

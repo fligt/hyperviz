@@ -288,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_npz_viewer.html">NPZ Viewer</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_npz_viewer.html">Guides</a></li><li class="breadcrumb-item"><a href="../notebooks/01_npz_viewer.html">NPZ Viewer</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -310,29 +310,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Guides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../notebooks/01_npz_viewer.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">NPZ Viewer</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../notebooks/02_npz_dashboard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">NPZ &amp; TIF Dashboard</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#api" id="toc-api" class="nav-link active" data-scroll-target="#api">API</a>
+  <ul class="collapse">
+  <li><a href="#create__simple_appdata-dict---dash.dash.dash" id="toc-create__simple_appdata-dict---dash.dash.dash" class="nav-link" data-scroll-target="#create__simple_appdata-dict---dash.dash.dash"><code>create__simple_app(data: dict) -&gt; dash.dash.Dash</code></a></li>
+  <li><a href="#make_viewerdata-dict---none" id="toc-make_viewerdata-dict---none" class="nav-link" data-scroll-target="#make_viewerdata-dict---none"><code>make_viewer(data: dict) -&gt; None</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_npz_viewer.html">Guides</a></li><li class="breadcrumb-item"><a href="../notebooks/01_npz_viewer.html">NPZ Viewer</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">NPZ Viewer</h1>
 </div>
@@ -351,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="1da4d78b" class="cell" data-execution_count="1">
+<div id="0ed457e5" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperviz <span class="im">import</span> make_viewer</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fairdatanow <span class="im">import</span> data_now</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -377,8 +404,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>make_viewer(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<section id="api" class="level2">
+<h2 class="anchored" data-anchor-id="api">API</h2>
+<p>The following API reference is generated from the public functions and their docstrings in <code>hyperviz.npz_viewer</code>.</p>
+<section id="create__simple_appdata-dict---dash.dash.dash" class="level3">
+<h3 class="anchored" data-anchor-id="create__simple_appdata-dict---dash.dash.dash"><code>create__simple_app(data: dict) -&gt; dash.dash.Dash</code></h3>
+<pre class="text"><code>No documentation available.</code></pre>
+</section>
+<section id="make_viewerdata-dict---none" class="level3">
+<h3 class="anchored" data-anchor-id="make_viewerdata-dict---none"><code>make_viewer(data: dict) -&gt; None</code></h3>
+<pre class="text"><code>Launch an interactive viewer for hyperspectral NPZ data.
+
+Parameters
+----------
+data
+    Mapping with an ``npz`` entry. Each key below ``npz`` identifies an
+    object and maps to a sequence whose first item is the path to its NPZ
+    file. Each NPZ file must contain an ``image`` array.
+
+Notes
+-----
+This function starts a Dash development server and blocks until that
+server is stopped.</code></pre>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

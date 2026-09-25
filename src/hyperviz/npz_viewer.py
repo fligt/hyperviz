@@ -47,6 +47,20 @@ def create__simple_app(data: dict) -> Dash:
     return app
 
 
-def make_viewer(data: dict):
+def make_viewer(data: dict) -> None:
+    """Launch an interactive viewer for hyperspectral NPZ data.
+
+    Parameters
+    ----------
+    data
+        Mapping with an ``npz`` entry. Each key below ``npz`` identifies an
+        object and maps to a sequence whose first item is the path to its NPZ
+        file. Each NPZ file must contain an ``image`` array.
+
+    Notes
+    -----
+    This function starts a Dash development server and blocks until that
+    server is stopped.
+    """
     app = create__simple_app(data)
     app.run(debug=True)
