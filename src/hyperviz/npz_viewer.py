@@ -3,7 +3,7 @@ import plotly.express as px
 from dash import Dash, Input, Output, State, dcc, html
 
 
-def create__simple_app(data: dict) -> Dash:
+def create_simple_app(data: dict) -> Dash:
 
     app = Dash(__name__)
     app.layout = html.Div(
@@ -62,5 +62,5 @@ def make_viewer(data: dict) -> None:
     This function starts a Dash development server and blocks until that
     server is stopped.
     """
-    app = create__simple_app(data)
+    app = create_simple_app(data)
     app.run(debug=True)

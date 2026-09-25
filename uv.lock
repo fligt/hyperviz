@@ -607,7 +607,9 @@ dependencies = [
     { name = "dash" },
     { name = "dash-daq" },
     { name = "numpy" },
+    { name = "pillow" },
     { name = "plotly" },
+    { name = "tomlkit" },
 ]
 
 [package.dev-dependencies]
@@ -626,7 +628,9 @@ requires-dist = [
     { name = "dash", specifier = ">=4.4.1" },
     { name = "dash-daq", specifier = ">=0.6.0" },
     { name = "numpy", specifier = ">=2.5.1" },
+    { name = "pillow", specifier = ">=12.3.0" },
     { name = "plotly", specifier = ">=6.9.0" },
+    { name = "tomlkit", specifier = ">=0.15.1" },
 ]
 
 [package.metadata.requires-dev]

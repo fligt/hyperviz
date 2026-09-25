@@ -13,7 +13,9 @@ dependencies = [
     "dash>=4.4.1",
     "dash-daq>=0.6.0",
     "numpy>=2.5.1",
+    "pillow>=12.3.0",
     "plotly>=6.9.0",
+    "tomlkit>=0.15.1",
 ]
 
 [project.scripts]
