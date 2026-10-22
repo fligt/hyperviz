@@ -1,0 +1,73 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.19.5
+  kernelspec:
+    display_name: .venv
+    language: python
+    name: python3
+---
+
+```{python}
+from dash_extensions import BeforeAfter
+from dash import Dash, Input, Output, dcc, html
+
+app = Dash()
+app.layout = html.Div(
+    [
+        html.H2("Before/after image comparison"),
+        html.Div(
+            [
+                dcc.Upload(
+                    id="upload-before",
+                    children=html.Button("Upload before image"),
+                    accept="image/*",
+                    multiple=False,
+                ),
+                dcc.Upload(
+                    id="upload-after",
+                    children=html.Button("Upload after image"),
+                    accept="image/*",
+                    multiple=False,
+                ),
+            ],
+        ),
+        html.Div(
+            "Upload both images to create the comparison.",
+            id="comparison",
+        ),
+    ],
+)
+
+
+@app.callback(
+    Output("comparison", "children"),
+    Input("upload-before", "contents"),
+    Input("upload-after", "contents"),
+    Input("upload-before", "filename"),
+    Input("upload-after", "filename"),
+)
+def show_comparison(before, after, before_name, after_name):
+    if not before or not after:
+        missing = "before" if not before else "after"
+        return f"Upload the {missing} image to create the comparison."
+
+    return html.Div(
+        [
+            BeforeAfter(
+                before={"src": before},
+                after={"src": after},
+                hover=False,
+            ),
+            html.P(f"Before: {before_name} | After: {after_name}"),
+        ]
+    )
+
+
+app.run()
+```
+

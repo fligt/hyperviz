@@ -1,4 +1,5 @@
 import base64
+import io
 import re
 import uuid
 
@@ -56,25 +57,58 @@ def _image_figure(
 
     rendered = image.crop((x0, y0, x1, y1))
     rendered.thumbnail(VIEW_SIZE, Image.Resampling.LANCZOS)
+    buffer = io.BytesIO()
+    rendered.save(buffer, format="PNG")
+    source = "data:image/png;base64," + base64.b64encode(buffer.getvalue()).decode()
     figure = go.Figure()
-    figure.add_layout_image(
-        source=rendered,
-        xref="x",
-        yref="y",
-        x=x0,
-        y=y0,
-        sizex=x1 - x0,
-        sizey=y1 - y0,
-        xanchor="left",
-        yanchor="top",
-        sizing="stretch",
-        layer="below",
+    figure.add_trace(
+        go.Image(
+            source=source,
+            x0=x0,
+            y0=y0,
+            dx=(x1 - x0) / rendered.width,
+            dy=(y1 - y0) / rendered.height,
+            hovertemplate="x: %{x:.0f}<br>y: %{y:.0f}<extra></extra>",
+        )
+    )
+    figure.add_trace(
+        go.Scatter(
+            x=[],
+            y=[],
+            mode="markers",
+            marker={
+                "color": "#FF2D2D",
+                "size": 12,
+                "line": {"color": "white", "width": 2},
+            },
+            hovertemplate="Selected point: (%{x:.0f}, %{y:.0f})<extra></extra>",
+            showlegend=False,
+        )
     )
     figure.update_layout(
         dragmode="pan",
         margin={"l": 0, "r": 0, "t": 0, "b": 0},
         xaxis={"range": [x0, x1], "visible": False},
         yaxis={"range": [y1, y0], "visible": False, "scaleanchor": "x"},
+    )
+    return figure
+
+
+def _empty_tif_spectrum() -> go.Figure:
+    """Create the placeholder for a future spectrum linked to a TIFF point."""
+    figure = go.Figure()
+    figure.add_annotation(
+        text="Select a point in the TIFF to determine its spectrum.",
+        x=0.5,
+        y=0.5,
+        xref="paper",
+        yref="paper",
+        showarrow=False,
+    )
+    figure.update_layout(
+        title="Spectrum at selected TIFF point",
+        xaxis_title="Wavelength",
+        yaxis_title="Intensity",
     )
     return figure
 
@@ -188,11 +222,26 @@ def create_dashboard(
             html.Div(
                 [
                     html.Div(
-                        [html.H3("TIFF"), _graph("tif")],
+                        [
+                            html.H3("TIFF"),
+                            _graph("tif"),
+                            html.Div(
+                                "Selected TIFF coordinates: none",
+                                id="tif-coordinates",
+                            ),
+                            dcc.Graph(
+                                id="tif-spectrum",
+                                figure=_empty_tif_spectrum(),
+                            ),
+                        ],
                         style={"minWidth": 0},
                     ),
                     html.Div(
-                        [html.H3("Pseudo RGB"), _graph("pseudo", draw=True)],
+                        [
+                            html.H3("Pseudo RGB"),
+                            _graph("pseudo", draw=True),
+                            dcc.Graph(id="spectrum"),
+                        ],
                         style={"minWidth": 0},
                     ),
                 ],
@@ -215,7 +264,6 @@ def create_dashboard(
                 ],
                 style={"display": "flex", "gap": "12px", "alignItems": "center"},
             ),
-            dcc.Graph(id="spectrum"),
         ]
     )
 
@@ -339,6 +387,44 @@ def create_dashboard(
         return _image_figure(_load_tif(data_dict, object_num))
 
     @app.callback(
+        Output("tif-coordinates", "children"),
+        Output("tif-spectrum", "figure"),
+        Output("tif", "figure", allow_duplicate=True),
+        Input("tif", "clickData"),
+        Input("object", "value"),
+        prevent_initial_call=True,
+    )
+    def _select_tif_point(
+        click_data: dict | None, object_num: str
+    ) -> tuple[str, go.Figure, Patch]:
+        figure = _empty_tif_spectrum()
+        marker_patch = Patch()
+        if ctx.triggered_id == "object" or not click_data:
+            marker_patch["data"][1]["x"] = []
+            marker_patch["data"][1]["y"] = []
+            return "Selected TIFF coordinates: none", figure, marker_patch
+
+        point = click_data["points"][0]
+        width, height = _load_tif(data_dict, object_num).size
+        x = max(0, min(width - 1, int(np.floor(point["x"]))))
+        y = max(0, min(height - 1, int(np.floor(point["y"]))))
+        marker_patch["data"][1]["x"] = [x]
+        marker_patch["data"][1]["y"] = [y]
+        figure.update_layout(
+            annotations=[
+                {
+                    "text": f"Spectrum for ({x}, {y}) is to be determined.",
+                    "x": 0.5,
+                    "y": 0.5,
+                    "xref": "paper",
+                    "yref": "paper",
+                    "showarrow": False,
+                }
+            ]
+        )
+        return f"Selected TIFF coordinates: x={x}, y={y}", figure, marker_patch
+
+    @app.callback(
         Output("roi-store", "data"),
         Input("pseudo", "relayoutData"),
         State("object", "value"),
@@ -442,11 +528,11 @@ def create_dashboard(
         if x_range is None:
             return no_update, no_update
 
-        rendered = _image_figure(tif, tif_x, tif_y).layout.images[0]
+        rendered = _image_figure(tif, tif_x, tif_y).data[0]
 
         pseudo_patch, tif_patch = Patch(), Patch()
-        for key in ("source", "x", "y", "sizex", "sizey"):
-            tif_patch["layout"]["images"][0][key] = getattr(rendered, key)
+        for key in ("source", "x0", "y0", "dx", "dy"):
+            tif_patch["data"][0][key] = getattr(rendered, key)
         if from_pseudo:
             tif_patch["layout"]["xaxis"]["range"] = tif_x
             tif_patch["layout"]["yaxis"]["range"] = tif_y
