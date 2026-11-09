@@ -1,0 +1,266 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.19.5
+  kernelspec:
+    display_name: hyperviz (3.14.2)
+    language: python
+    name: python3
+---
+
+```{python}
+# Data loading
+from fairdatanow import data_now, login
+
+# Choose the Nextcloud dataset.
+url = "https://laboppad.nl/ukiyo-e-world"
+
+# Check the credentials saved in your keyring.
+login(url)
+# Define the TIFF to retrieve using a TOML filename pattern.
+toml_txt = """
+[data.tif]
+RV-1-4468-544 = ".*akama.*RV-1-4468-544[.]tif"
+"""
+# Retrieve the matching TIFF and select the first configured object.
+files = data_now(url, toml_txt)
+object_num = next(iter(files["tif"]))
+```
+
+```{python}
+# Plotting and interaction
+from math import ceil, floor
+
+import dash_ag_grid as dag
+import plotly.express as px
+import plotly.graph_objects as go
+from PIL import Image
+from dash import Dash, Input, Output, Patch, State, ctx, dcc, html, no_update
+
+# Open the TIFF at full resolution so zooming can reveal more detail.
+with Image.open(files["tif"][object_num][0]) as source:
+    width, height = source.size
+    image = source.convert("RGB")
+
+
+# Render the visible region while keeping original TIFF pixel coordinates.
+def image_trace(x_range=(0, width), y_range=(0, height)):
+    # Crop the original TIFF, then resize only the visible region.
+    x0 = max(0, min(width - 1, floor(min(x_range))))
+    y0 = max(0, min(height - 1, floor(min(y_range))))
+    x1 = max(x0 + 1, min(width, ceil(max(x_range))))
+    y1 = max(y0 + 1, min(height, ceil(max(y_range))))
+    # Resize only the cropped region to keep the displayed image small.
+    preview = image.crop((x0, y0, x1, y1))
+    preview.thumbnail((900, 700), Image.Resampling.LANCZOS)
+    # Position the preview in the coordinate system of the full TIFF.
+    trace = px.imshow(preview, binary_string=True).data[0]
+    trace.update(x0=x0, y0=y0, dx=(x1 - x0) / preview.width,
+                 dy=(y1 - y0) / preview.height)
+    return trace
+
+
+# Create the initial TIFF view.
+tif = go.Figure(image_trace())
+# Keep all numbered dots in one trace above the TIFF.
+tif.add_scatter(
+    x=[], y=[], text=[], customdata=[], mode="markers+text",
+    textposition="top center",
+    textfont=dict(
+        size=16, color="black",
+        shadow=", ".join(
+            f"{dx}px {dy}px 0 white"
+            for dx, dy in ((-1, -1), (0, -1), (1, -1), (-1, 0),
+                           (1, 0), (-1, 1), (0, 1), (1, 1))
+        ),
+    ),
+    marker=dict(color=[], size=12, line=dict(color="white", width=2)),
+    hovertemplate="Dot %{customdata}<br>x=%{x}, y=%{y}<extra></extra>",
+    showlegend=False,
+)
+# Enable panning and keep the image proportions with the origin at the top left.
+tif.update_layout(
+    dragmode="pan", margin=dict(l=0, r=0, t=0, b=0),
+    xaxis=dict(visible=False, range=[0, width]),
+    yaxis=dict(visible=False, range=[height, 0], scaleanchor="x"),
+)
+
+# Reserve a graph for the spectrum data that will be supplied later.
+spectrum = go.Figure()
+spectrum.update_layout(
+    title="Spectrum at selected TIFF point",
+    xaxis_title="Wavelength", yaxis_title="Intensity",
+)
+spectrum.add_annotation(
+    text="Spectrum data will be provided later.",
+    x=0.5, y=0.5, xref="paper", yref="paper", showarrow=False,
+)
+
+# Reuse the lowest available number; colors repeat after the palette is exhausted.
+DOT_COLORS = px.colors.qualitative.Dark24
+
+# Arrange the TIFF, editable dot table, and spectrum placeholder.
+app = Dash(__name__)
+app.layout = html.Div([
+    dcc.Store(id="next-dot-number", data=1),
+    dcc.Store(id="dot-entries", data=[]),
+    html.Div([
+        html.Div(
+            dcc.Graph(id="tif", figure=tif, config={"scrollZoom": True},
+                      responsive=True, style={"height": "700px", "width": "100%"}),
+            style={"flex": "1 1 400px", "minWidth": 0},
+        ),
+        html.Div([
+            html.Div("Click the TIFF to add a dot; click a dot to remove it.", id="coordinates"),
+            html.P("Double-click Name or Annotation to edit. Select grid rows using "
+                   "the checkboxes to delete several dots. Changes last for this session."),
+            html.Button("Delete selected dots", id="delete-dots", n_clicks=0),
+            dag.AgGrid(
+                id="dot-grid", rowData=[], getRowId="params.data.id",
+                columnDefs=[
+                    {"headerName": "Dot", "field": "number",
+                     "width": 90, "sort": "asc", "cellDataType": "number"},
+                    {"headerName": "Name", "field": "name", "editable": True,
+                     "flex": 1},
+                    {"headerName": "Annotation", "field": "annotation", "editable": True,
+                     "cellEditor": "agLargeTextCellEditor", "cellEditorPopup": True,
+                     "flex": 2},
+                    {"headerName": "X", "field": "x", "width": 110},
+                    {"headerName": "Y", "field": "y", "width": 110},
+                ],
+                defaultColDef={"sortable": True, "filter": True, "resizable": True,
+                               "minWidth": 90, "wrapHeaderText": True, "autoHeaderHeight": True},
+                dashGridOptions={"rowSelection": {"mode": "multiRow"},
+                                 "rowHeight": 36, "headerHeight": 40,
+                                 "domLayout": "normal",
+                                 "stopEditingWhenCellsLoseFocus": True},
+                style={"flex": "1", "minHeight": "300px", "width": "100%",
+                       "marginTop": "12px"},
+            ),
+        ], style={"flex": "1 1 480px", "minWidth": 0, "height": "700px",
+                  "display": "flex", "flexDirection": "column", "alignItems": "stretch"}),
+    ], style={"display": "flex", "flexWrap": "wrap", "gap": "20px",
+              "alignItems": "flex-start"}),
+    dcc.Graph(figure=spectrum, id="tif-spectrum"),
+])
+
+
+# Update the selection on click and render more image detail on zoom or pan.
+@app.callback(
+    Output("tif", "figure"), Output("coordinates", "children"),
+    Output("dot-grid", "rowData"), Output("next-dot-number", "data"),
+    Output("dot-entries", "data"),
+    Input("tif", "clickData"), Input("tif", "relayoutData"),
+    Input("delete-dots", "n_clicks"),
+    Input("dot-grid", "cellValueChanged"),
+    State("dot-entries", "data"), State("dot-grid", "selectedRows"),
+    State("next-dot-number", "data"),
+    State("tif", "figure"),
+    prevent_initial_call=True,
+)
+def update_view(click_data, event, delete_clicks, edits, rows, selected_rows, next_number,
+                current_figure):
+    # Send only changed figure properties to preserve the current view.
+    patch = Patch()
+    # Keep the complete dot list independently of the grid's client-side state.
+    rows = [dict(row) for row in (rows or [])]
+    # Retain plotted dots as well if a browser-side store update is still pending.
+    marker_trace = current_figure["data"][1]
+    known_numbers = {row["number"] for row in rows}
+    for number, x, y in zip(marker_trace.get("customdata", []),
+                            marker_trace.get("x", []), marker_trace.get("y", [])):
+        number = int(number)
+        if number not in known_numbers:
+            rows.append(dict(id=str(number), number=number,
+                             color=DOT_COLORS[(number - 1) % len(DOT_COLORS)],
+                             name=f"Dot {number}", annotation="", x=x, y=y))
+            known_numbers.add(number)
+    if "dot-grid.cellValueChanged" in ctx.triggered_prop_ids:
+        for edit in (edits if isinstance(edits, list) else [edits]):
+            if not edit or edit.get("colId") not in ("name", "annotation"):
+                continue
+            for row in rows:
+                if row["id"] == str(edit.get("rowId")):
+                    # AG Grid 35 emits `value`; also accept older event payloads.
+                    field = edit["colId"]
+                    data = edit.get("data") or {}
+                    if "value" in edit:
+                        row[field] = edit["value"]
+                    elif "newValue" in edit:
+                        row[field] = edit["newValue"]
+                    elif field in data:
+                        row[field] = data[field]
+        return no_update, no_update, rows, no_update, rows
+    message = None
+    if "delete-dots.n_clicks" in ctx.triggered_prop_ids:
+        selected_ids = {row["number"] for row in (selected_rows or [])}
+        if not selected_ids:
+            return no_update, "Select grid rows to delete their dots.", no_update, no_update, no_update
+        rows = [row for row in rows if row["number"] not in selected_ids]
+        message = f"Deleted {len(selected_ids)} dot(s)."
+    elif "tif.clickData" in ctx.triggered_prop_ids and click_data:
+        point = click_data["points"][0]
+        if point.get("curveNumber") == 1:
+            number = point["customdata"]
+            rows = [row for row in rows if row["number"] != number]
+            message = f"Removed dot {number}."
+        else:
+            x = max(0, min(width - 1, floor(point["x"])))
+            y = max(0, min(height - 1, floor(point["y"])))
+            existing = next((row for row in rows if row["x"] == x and row["y"] == y), None)
+            if existing:
+                rows = [row for row in rows if row["number"] != existing["number"]]
+                message = f"Removed dot {existing['number']}."
+            else:
+                used_numbers = {row["number"] for row in rows}
+                next_number = next(n for n in range(1, len(rows) + 2)
+                                   if n not in used_numbers)
+                rows.append(dict(id=str(next_number), number=next_number,
+                                 color=DOT_COLORS[(next_number - 1) % len(DOT_COLORS)],
+                                 name=f"Dot {next_number}", annotation="", x=x, y=y))
+                message = f"Added dot {next_number}: x={x}, y={y}."
+                next_number += 1
+    if message is not None:
+        rows.sort(key=lambda row: row["number"])
+        used_numbers = {row["number"] for row in rows}
+        next_number = next(n for n in range(1, len(rows) + 2)
+                           if n not in used_numbers)
+        # Replace the complete marker trace so Plotly receives all dots together.
+        dots = go.Scatter(marker_trace)
+        dots.update(
+            x=[row["x"] for row in rows], y=[row["y"] for row in rows],
+            text=[str(row["number"]) for row in rows],
+            customdata=[row["number"] for row in rows],
+            marker_color=[row["color"] for row in rows],
+        )
+        patch["data"][1] = dots.to_plotly_json()
+        return patch, f"{message} Total dots: {len(rows)}.", rows, next_number, rows
+
+    # Ignore events without a view change.
+    if not event:
+        return no_update, no_update, no_update, no_update, no_update
+    # Restore the full image when the Plotly axes are reset.
+    if event.get("xaxis.autorange") or event.get("yaxis.autorange"):
+        x_range, y_range = [0, width], [height, 0]
+        patch["layout"]["xaxis"]["range"] = x_range
+        patch["layout"]["yaxis"]["range"] = y_range
+    else:
+        # Read the visible bounds supplied by a zoom or pan event.
+        x_range = event.get("xaxis.range") or [event.get("xaxis.range[0]"), event.get("xaxis.range[1]")]
+        y_range = event.get("yaxis.range") or [event.get("yaxis.range[0]"), event.get("yaxis.range[1]")]
+        if None in x_range + y_range:
+            return no_update, no_update, no_update, no_update, no_update
+    # Replace the image layer while retaining all numbered dots.
+    trace = image_trace(x_range, y_range)
+    for key in ("source", "x0", "y0", "dx", "dy"):
+        patch["data"][0][key] = getattr(trace, key)
+    return patch, no_update, no_update, no_update, no_update
+
+
+# Display the dashboard inside the notebook.
+app.run(jupyter_mode="external", jupyter_height=1500, debug=False)
+```
