@@ -20,6 +20,11 @@ dependencies = [
     "tomlkit>=0.15.1",
 ]
 
+[project.urls]
+Homepage = "https://github.com/fligt/hyperviz"
+Documentation = "https://fligt.github.io/hyperviz"
+Repository = "https://github.com/fligt/hyperviz"
+
 [project.scripts]
 hyperviz = "hyperviz:main"
 
@@ -39,5 +44,13 @@ dev = [
     "ruff>=0.16.8",
 ]
 
-[tool.jupytext]
-formats = "ipynb,qmd"
+# [tool.jupytext]
+# formats = "ipynb,qmd"
+
+[[tool.jupytext.formats]]
+"notebooks/" = "qmd"
+"_nbs/_docs/" = "ipynb"
+
+[[tool.jupytext.formats]]
+"src/hyperviz/" = "py:percent"
+"_nbs/_src/" = "ipynb"
