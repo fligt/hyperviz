@@ -157,4 +157,7 @@ checklink/cookies.txt
 
 # FL added the double star glob pattern 
 # Quarto
-**.quarto
+**.quarto 
+
+# FL added this one too
+.virtual_documents/
