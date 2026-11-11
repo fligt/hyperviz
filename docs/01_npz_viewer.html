@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>NPZ Viewer – hyperviz</title>
+<title>npz_viewer – hyperviz</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -149,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_npz_viewer.html">NPZ Viewer</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_npz_viewer.html">01 Npz Viewer</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -170,13 +170,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_npz_viewer.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">NPZ Viewer</span></a>
+ <span class="menu-text">01 Npz Viewer</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_npz_dashboard.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">NPZ &amp; TIF Dashboard</span></a>
+ <span class="menu-text">02 Npz Dashboard</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -198,28 +198,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">NPZ Viewer</h1>
-</div>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<div id="07acbc1b" class="cell" data-execution_count="1">
+<div id="3f6881c4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperviz <span class="im">import</span> make_viewer</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fairdatanow <span class="im">import</span> data_now</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -245,32 +229,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>make_viewer(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="api" class="level2">
-<h2 class="anchored" data-anchor-id="api">API</h2>
-<p>The following API reference is generated from the public functions and their docstrings in <code>hyperviz.npz_viewer</code>.</p>
-<section id="create_simple_appdata-dict---dash.dash.dash" class="level3">
-<h3 class="anchored" data-anchor-id="create_simple_appdata-dict---dash.dash.dash"><code>create_simple_app(data: dict) -&gt; dash.dash.Dash</code></h3>
-<pre class="text"><code>No documentation available.</code></pre>
-</section>
-<section id="make_viewerdata-dict---none" class="level3">
-<h3 class="anchored" data-anchor-id="make_viewerdata-dict---none"><code>make_viewer(data: dict) -&gt; None</code></h3>
-<pre class="text"><code>Launch an interactive viewer for hyperspectral NPZ data.
-
-Parameters
-----------
-data
-    Mapping with an ``npz`` entry. Each key below ``npz`` identifies an
-    object and maps to a sequence whose first item is the path to its NPZ
-    file. Each NPZ file must contain an ``image`` array.
-
-Notes
------
-This function starts a Dash development server and blocks until that
-server is stopped.</code></pre>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -756,8 +716,8 @@ server is stopped.</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./02_npz_dashboard.html" class="pagination-link" aria-label="NPZ &amp; TIF Dashboard">
-        <span class="nav-page-text">NPZ &amp; TIF Dashboard</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./02_npz_dashboard.html" class="pagination-link" aria-label="02 Npz Dashboard">
+        <span class="nav-page-text">02 Npz Dashboard</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

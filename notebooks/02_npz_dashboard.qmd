@@ -1,5 +1,4 @@
 ---
-title: NPZ & TIF Dashboard
 jupyter:
   jupytext:
     text_representation:
@@ -12,7 +11,6 @@ jupyter:
     language: python
     name: python3
 ---
-
 
 ```{python}
 #| eval: false
@@ -86,28 +84,4 @@ if missing:
     raise FileNotFoundError("Missing cached files:\n" + "\n".join(map(str, missing)))
 
 make_dashboard(data, toml_text="")
-```
-
-![Example of a dashboard page](../images/npz_tif_dashboard.png)
-
-## API
-
-The following API reference is generated from the public functions and their
-docstrings in `hyperviz.npz_dashboard`.
-
-```{python}
-#| echo: false
-#| output: asis
-
-import inspect
-import hyperviz.npz_dashboard as module
-
-for name, function in inspect.getmembers(module, inspect.isfunction):
-    if function.__module__ == module.__name__ and not name.startswith("_"):
-        signature = inspect.signature(function)
-        docstring = inspect.getdoc(function) or "No documentation available."
-        print(f"### `{name}{signature}`\n")
-        print("```text")
-        print(docstring)
-        print("```\n")
 ```

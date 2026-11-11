@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>NPZ &amp; TIF Dashboard – hyperviz</title>
+<title>npz_dashboard – hyperviz</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -149,7 +149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_npz_dashboard.html">NPZ &amp; TIF Dashboard</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_npz_dashboard.html">02 Npz Dashboard</a></li></ol></nav>
         <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -170,13 +170,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_npz_viewer.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">NPZ Viewer</span></a>
+ <span class="menu-text">01 Npz Viewer</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_npz_dashboard.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">NPZ &amp; TIF Dashboard</span></a>
+ <span class="menu-text">02 Npz Dashboard</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -198,28 +198,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">NPZ &amp; TIF Dashboard</h1>
-</div>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<div id="5f948c66" class="cell" data-execution_count="1">
+<div id="6880f70e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fairdatanow <span class="im">import</span> data_now</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperviz <span class="im">import</span> make_dashboard</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -254,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data_now(url, toml_txt)</span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>make_dashboard(data, toml_txt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="0f035c30" class="cell" data-execution_count="2">
+<div id="5ed768f4" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperviz <span class="im">import</span> make_dashboard</span>
@@ -287,70 +271,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>make_dashboard(data, toml_text<span class="op">=</span><span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../images/npz_tif_dashboard.png" class="img-fluid figure-img"></p>
-<figcaption>Example of a dashboard page</figcaption>
-</figure>
-</div>
-<section id="api" class="level2">
-<h2 class="anchored" data-anchor-id="api">API</h2>
-<p>The following API reference is generated from the public functions and their docstrings in <code>hyperviz.npz_dashboard</code>.</p>
-<section id="create_dashboarddata_dict-dict-toml_text-str-default_object-str-none-none-title-str-spectral-image-dashboard---dash.dash.dash" class="level3">
-<h3 class="anchored" data-anchor-id="create_dashboarddata_dict-dict-toml_text-str-default_object-str-none-none-title-str-spectral-image-dashboard---dash.dash.dash"><code>create_dashboard(data_dict: dict, toml_text: str, *, default_object: str | None = None, title: str = 'Spectral Image Dashboard') -&gt; dash.dash.Dash</code></h3>
-<pre class="text"><code>Create a spectral-image dashboard without starting its server.
-
-Parameters
-----------
-data_dict
-    Mapping with matching ``npz`` and ``tif`` entries for each object.
-    NPZ files must contain ``image`` and ``wavelengths`` arrays.
-toml_text
-    TOML configuration retained by the dashboard when ROI annotations are
-    downloaded.
-default_object
-    Object selected when the dashboard opens. The first NPZ object is used
-    when this is omitted.
-title
-    Heading displayed above the dashboard.
-
-Returns
--------
-Dash
-    The configured Dash application. Call ``run`` on it to start a server.
-
-Raises
-------
-ValueError
-    If no NPZ objects are supplied or ``default_object`` is unknown.</code></pre>
-</section>
-<section id="make_dashboarddata_dict-dict-toml_text-str-default_object-str-none-none-title-str-spectral-image-dashboard---none" class="level3">
-<h3 class="anchored" data-anchor-id="make_dashboarddata_dict-dict-toml_text-str-default_object-str-none-none-title-str-spectral-image-dashboard---none"><code>make_dashboard(data_dict: dict, toml_text: str, *, default_object: str | None = None, title: str = 'Spectral Image Dashboard') -&gt; None</code></h3>
-<pre class="text"><code>Create and launch an interactive spectral-image dashboard.
-
-Parameters
-----------
-data_dict
-    Mapping with matching ``npz`` and ``tif`` entries for each object.
-    NPZ files must contain ``image`` and ``wavelengths`` arrays.
-toml_text
-    TOML configuration retained by the dashboard when ROI annotations are
-    downloaded.
-default_object
-    Object selected when the dashboard opens. The first NPZ object is used
-    when this is omitted.
-title
-    Heading displayed above the dashboard.
-
-Notes
------
-This function starts Dash in external Jupyter mode and blocks until the
-server is stopped. Use ``create_dashboard`` when the application needs
-to be configured or embedded before it is run.</code></pre>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -831,8 +753,8 @@ to be configured or embedded before it is run.</code></pre>
   </script>
 <nav class="page-navigation" aria-label="Page">
   <div class="nav-page nav-page-previous">
-      <a href="./01_npz_viewer.html" class="pagination-link" aria-label="NPZ Viewer">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">NPZ Viewer</span>
+      <a href="./01_npz_viewer.html" class="pagination-link" aria-label="01 Npz Viewer">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">01 Npz Viewer</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
