@@ -28,7 +28,9 @@ RV-1-4468-544 = ".*akama.*RV-1-4468-544[.]tif"
 """
 # Retrieve the matching TIFF and select the first configured object.
 files = data_now(url, toml_txt)
-object_num = next(iter(files["tif"]))
+# Get the object numbers as a list, then choose the first one.
+object_numbers = list(files["tif"].keys())
+object_num = object_numbers[0]
 ```
 
 ```{python}

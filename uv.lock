@@ -787,6 +787,7 @@ dependencies = [
     { name = "numpy" },
     { name = "pillow" },
     { name = "plotly" },
+    { name = "read-spx" },
     { name = "tomlkit" },
 ]
 
@@ -812,6 +813,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.5.1" },
     { name = "pillow", specifier = ">=12.3.0" },
     { name = "plotly", specifier = ">=6.9.0" },
+    { name = "read-spx", specifier = ">=0.1.0" },
     { name = "tomlkit", specifier = ">=0.15.1" },
 ]
 
@@ -2350,6 +2352,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/82/a4/33dc28f6fcd5ff80ee80b2afddea9bc46a42f5e2bbc000eeb1b5f6194918/quarto-0.1.0.tar.gz", hash = "sha256:d9a4978110204f5b9d3af39faa9e195083efcbac8f6a23789e29cb27c72ded15", size = 2920, upload-time = "2021-02-03T21:53:12.381Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7d/14/8af79508df038ab05953ecf862420c7f4cc131b1682f0c80cb4f78c58593/quarto-0.1.0-py3-none-any.whl", hash = "sha256:8138fc9d1bee6269a5436837baedc699a262be1478f96444d6f99029f1a114f0", size = 10319, upload-time = "2021-02-03T21:53:10.812Z" },
+]
+
+[[package]]
+name = "read-spx"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f9/91/dc59bc9cdbb92b0066e17840f10deb0a1f9a4906aae2e9c1033769ae8d3a/read_spx-0.1.0.tar.gz", hash = "sha256:324e58f8d94967e3529a9b81c9a8a7160283d3a887bb37a191ed5d13ded67f59", size = 10267, upload-time = "2026-11-10T13:58:34.967Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/90/9b7e04af0d0f873ef9fcb82b273e881812a201803b601508b05eeda55199/read_spx-0.1.0-py3-none-any.whl", hash = "sha256:8130e1a44a7d07d5f1cf4bf7b6b18b65a63f0c42f6bafb7e01bcdae195c67f57", size = 22907, upload-time = "2026-11-10T13:58:33.701Z" },
 ]
 
 [[package]]

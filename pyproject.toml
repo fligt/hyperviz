@@ -17,6 +17,7 @@ dependencies = [
     "numpy>=2.5.1",
     "pillow>=12.3.0",
     "plotly>=6.9.0",
+    "read-spx>=0.1.0",
     "tomlkit>=0.15.1",
 ]
 
