@@ -1,0 +1,82 @@
+# Hier staat tekst over de context van de vraag en de objecten
+#"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+# Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+# Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+# Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+# om een nieuw object toe te voegen begin je met:
+
+[[data]]
+    object_num = "RV-1-4468-544"
+
+#Dit vul je eronder meteen aan met de nieuwe informatie
+    [data.metadata]
+        name = "Prentnaam"
+        location = "Rijkserfgoedlab"
+    
+    [data.tif]
+        path = ".*akama.*RV-1-4468-544[.]tif"
+
+    [[data.spx]]
+        name = "Pink"
+        path = "*/ukiyo-e-world/data/XRF/raw/2026-801_RV-1-4468-544_03_roze.spx"
+        x = 450
+        y = 2134
+        #Verander het spx pad op basis van Franks resultaat
+
+    [[data.spx]]
+        name = "Yellow"
+        path = "*/ukiyo-e-world/data/XRF/raw/2026-801_RV-1-4468-544_05_geel.spx"
+
+    [data.png]
+        path = ".*akama.*RV-1-4468-544[.]png"
+
+[[annotations]]
+    object_num = "RV-1-4468-544"
+    
+    [[annotations.spx]]
+        path = ""
+        x = 450
+        y = 2134
+    
+    [[annotations.roi]]
+        name = "Robe"
+        x0
+        x1
+        y0
+        y1
+
+    [[annotations.roi]]
+        name = "Sky"
+
+# Deze structuur resulteert in een hele simpele json format:
+# {
+#   "data": [
+#     {
+#       "object_num": "RV-1-4468-544",
+#       "metadata": {
+#         "name": "Prentnaam",
+#         "location": "Rijkserfgoedlab"
+#       },
+#       "tif": {
+#         "path": ".*akama.*RV-1-4468-544[.]tif"
+#       },
+#       "spx": [
+#         {
+#           "name": "pink",
+#           "path": "C:/Users/koenv/.cache/fairdatanow/ukiyo-e-world/data/XRF/raw/2026-801_RV-1-4468-544_03_roze.spx",
+#           "x": 450,
+#           "y": 2134
+#         },
+#         {
+#           "name": "yellow",
+#           "path": "C:/Users/koenv/.cache/fairdatanow/ukiyo-e-world/data/XRF/raw/2026-801_RV-1-4468-544_05_geel.spx"
+#         }
+#       ],
+#       "png": {
+#         "path": ".*akama.*RV-1-4468-544[.]tif"
+#       }
+#     }
+#   ]
+# }
+# Elk nieuwe object wat je extra aanmaakt komt onder het data kopje in het lijstje erbij

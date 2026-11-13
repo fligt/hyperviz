@@ -1,0 +1,106 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.19.5
+  kernelspec:
+    display_name: hyperviz (3.14.2)
+    language: python
+    name: python3
+---
+
+```{python}
+from fairdatanow import data_now, login
+
+url = "https://laboppad.nl/ukiyo-e-world"
+
+
+login(url)
+
+toml_txt = """
+[data.tif]
+RV-1-4468-544 = ".*akama.*RV-1-4468-544[.]tif"
+"""
+
+files = data_now(url, toml_txt)
+
+object_num = next(iter(files["tif"]))
+tif_path = files["tif"][object_num][0]
+```
+
+```{python}
+import plotly.express as px
+import dash_ag_grid as dag
+from PIL import Image
+from dash import Dash, Input, Output, Patch, State, dcc, html
+
+with Image.open(tif_path) as source:
+    image = source.convert("RGB")
+
+fig = px.imshow(image, binary_string=True, title=object_num)
+
+# Add point layer
+fig.add_scatter(
+    x=[], y=[], mode="markers",
+    marker=dict(color="red", size=12, line=dict(color="white", width=2)),
+    showlegend=False,
+)
+
+# Lock tif in place
+width, height = image.size
+fig.update_xaxes(range=[-0.5, width - 0.5], autorange=False)
+fig.update_yaxes(range=[height - 0.5, -0.5], autorange=False)
+fig.update_layout(uirevision="tif")
+
+# Dash app creation
+app = Dash(__name__)
+app.layout = html.Div([
+    dcc.Graph(figure=fig, id="graph"),
+    dag.AgGrid(
+        id="points-grid",
+        columnDefs=[
+            {"field": "point"},
+            {"field": "text", "editable": True, "cellDataType": "text"},
+            {"field": "x"},
+            {"field": "y"},
+        ],
+        rowData=[],
+        dashGridOptions={"stopEditingWhenCellsLoseFocus": True}
+    ),
+])
+
+# Point callbacks
+@app.callback(
+    Output("graph", "figure"),
+    Output("points-grid", "rowData"),
+    Input("graph", "clickData"),
+    State("points-grid", "rowData"),
+    prevent_initial_call=True,
+)
+def place_point(click_data, rows):
+    # Find clicked point
+    point = click_data["points"][0]
+    patch = Patch()
+    grid_patch = Patch()
+    # If the scatter layer [1] is clicked instead of the fig [0] then delete the point
+    if point["curveNumber"] == 1:
+        index = point["pointIndex"]
+        del patch["data"][1]["x"][index]
+        del patch["data"][1]["y"][index]
+        del grid_patch[index]
+        for row_index in range(index, len(rows) - 1):
+            grid_patch[row_index]["point"] = row_index + 1
+    # Add the point using patches to both the scatter layer and the AG Grid
+    else:
+        patch["data"][1]["x"].append(point["x"])
+        patch["data"][1]["y"].append(point["y"])
+        grid_patch.append({
+            "point": len(rows) + 1, "text": "", "x": point["x"], "y": point["y"]
+        })
+    return patch, grid_patch
+
+app.run(jupyter_mode="inline", debug=False)
+```

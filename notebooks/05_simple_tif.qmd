@@ -57,6 +57,5 @@ def print_coordinates(click_data):
     point = click_data["points"][0]
     return f"x={point['x']}, y={point['y']}"
 
-app.run(jupyter_mode="inline")
+app.run(jupyter_mode="inline", debug=False)
 ```
-
