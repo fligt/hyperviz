@@ -1,0 +1,93 @@
+---
+title: Frank's spx tool
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.19.5
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+```{python}
+from fairdatanow import DataViewer, data_now, login, filters
+from read_spx import get_spectrum 
+import re 
+import os
+
+url = "https://laboppad.nl/ukiyo-e-world" 
+```
+
+```{python}
+spx_files = DataViewer(login(url), **filters(search='.*RV-1-4468-544.*[.]spx', use_regex=True)).download_filtered()
+```
+
+Ok, let's learn first how to use plotly to make a figure... 
+
+```{python}
+spx_files
+```
+
+```{python}
+titles = [os.path.basename(spx) for spx in spx_files]
+titles
+```
+
+```{python}
+spectra = [get_spectrum(spx) for spx in spx_files]
+```
+
+```{python}
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
+fig = make_subplots(rows=len(spectra), cols=1, shared_xaxes=True)#, shared_yaxes=True)
+
+for i, df in enumerate(spectra): 
+    fig.add_trace(
+        go.Scatter(x=df['energies'], y=df['intensities'], mode='lines', name=titles[i]),
+        row=i+1, col=1, 
+    )
+
+fig.update_layout(height=1000, 
+                  width=1500, 
+                  title_text="Side By Side Subplots",
+                  xaxis=dict(tickmode='linear', tick0=0, dtick=1))
+fig.update_yaxes(range=[0, 4000])
+fig.update_xaxes(range=[0, 20])
+
+fig.show()
+```
+
+Ok, to be continued...
+
+```{python}
+import moseley
+import holoviews as hv
+hv.extension('bokeh')
+```
+
+```{python}
+ppa = moseley.PeakPatternAtlas()
+```
+
+```{python}
+ppa.plot_atlas()
+```
+
+```{python}
+ppa.table
+```
+
+```{python}
+ptable = moseley.PeriodicTable()
+```
+
+```{python}
+ptable.plot_table()
+```
+
