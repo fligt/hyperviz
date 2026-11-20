@@ -32,6 +32,7 @@ tif_path = files["tif"][object_num][0]
 ```
 
 ```{python}
+import json
 import plotly.express as px
 import dash_ag_grid as dag
 from PIL import Image
@@ -59,6 +60,12 @@ fig.update_xaxes(range=[-0.5, width - 0.5], autorange=False)
 fig.update_yaxes(range=[height - 0.5, -0.5], autorange=False)
 fig.update_layout(uirevision="tif")
 
+FILE_PATHS = [
+    "examples/spectrum_01.csv",
+    "examples/spectrum_02.csv",
+    "examples/spectrum_03.csv",
+]
+
 # Dash app creation
 app = Dash(__name__)
 app.layout = html.Div([
@@ -66,8 +73,25 @@ app.layout = html.Div([
     dag.AgGrid(
         id="points-grid",
         columnDefs=[
-            {"field": "point"},
-            {"field": "text", "editable": True, "cellDataType": "text"},
+            {
+                "field": "point",
+                # This is a function that adds the color of the dot to the background color of the cell (WRITTEN BY AI)
+                "cellStyle": {
+                    "function": (
+                        "params.value && {color: 'white', "
+                        f"backgroundColor: {json.dumps(DOT_COLORS)}[(params.value - 1) % {len(DOT_COLORS)}]"
+                        "}"
+                    ),
+                },
+            },
+            {"field": "name", "editable": True, "cellDataType": "text"},
+            {"field": "annotation", "editable": True, "cellDataType": "text"},
+            {
+                "field": "spx file",
+                "editable": True,
+                "cellEditor": "agSelectCellEditor",
+                "cellEditorParams": {"values": ["", *FILE_PATHS]},
+            },
             {"field": "x"},
             {"field": "y"},
         ],
@@ -107,7 +131,8 @@ def place_point(click_data, rows):
         # Add the next missing color to the colors list in the scatter, the modulo is used to wrap around again example 3 % 24 = 3 and 25 % 24 = 1 so it will wrap around after 24
         patch["data"][1]["marker"]["color"].append(DOT_COLORS[len(rows) % len(DOT_COLORS)])
         grid_patch.append({
-            "point": len(rows) + 1, "text": "", "x": point["x"], "y": point["y"]
+            "point": len(rows) + 1, "name": "", "annotation": "", "file": "",
+            "x": point["x"], "y": point["y"],
         })
     return patch, grid_patch
 
