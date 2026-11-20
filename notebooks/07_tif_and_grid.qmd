@@ -43,9 +43,13 @@ with Image.open(tif_path) as source:
 fig = px.imshow(image, binary_string=True, title=object_num)
 
 # Add point layer
+DOT_COLORS = px.colors.qualitative.Dark24
+# Keep color empty to fill in later with the DOT_COLORS
 fig.add_scatter(
-    x=[], y=[], mode="markers",
-    marker=dict(color="red", size=12, line=dict(color="white", width=2)),
+    x=[], y=[], text=[], mode="markers+text",
+    textposition="top center",
+    textfont=dict(color="black", size=16, shadow="0 0 3px white"),
+    marker=dict(color=[], size=12, line=dict(color="white", width=2)),
     showlegend=False,
 )
 
@@ -90,6 +94,8 @@ def place_point(click_data, rows):
         index = point["pointIndex"]
         del patch["data"][1]["x"][index]
         del patch["data"][1]["y"][index]
+        del patch["data"][1]["text"][len(rows) - 1]
+        del patch["data"][1]["marker"]["color"][len(rows) - 1]
         del grid_patch[index]
         for row_index in range(index, len(rows) - 1):
             grid_patch[row_index]["point"] = row_index + 1
@@ -97,6 +103,9 @@ def place_point(click_data, rows):
     else:
         patch["data"][1]["x"].append(point["x"])
         patch["data"][1]["y"].append(point["y"])
+        patch["data"][1]["text"].append(str(len(rows) + 1))
+        # Add the next missing color to the colors list in the scatter, the modulo is used to wrap around again example 3 % 24 = 3 and 25 % 24 = 1 so it will wrap around after 24
+        patch["data"][1]["marker"]["color"].append(DOT_COLORS[len(rows) % len(DOT_COLORS)])
         grid_patch.append({
             "point": len(rows) + 1, "text": "", "x": point["x"], "y": point["y"]
         })
@@ -104,3 +113,4 @@ def place_point(click_data, rows):
 
 app.run(jupyter_mode="inline", debug=False)
 ```
+
